@@ -1,0 +1,205 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+:root {
+    --color-black: #000;
+    --color-white: #fff;
+    --color-grey: #b9b9b9;    
+    --color-red: #d40000;
+    --color-green: #16c922;
+    --color-blue: #3b82f6;
+    --color-blue-dark: #0f172a;
+    --color-yellow: #eeee04;
+}
+
+body {
+    background-color: var(--color-blue-dark);
+    color: var(--color-white);
+}
+
+.btn {
+    padding: 6px 12px;
+    border: 1px solid var(--color-black);
+    border-radius: 4px;
+    background-color: var(--color-blue);
+    color: var(--color-white);
+    cursor: pointer;
+}
+
+
+
+.game-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.game-desc {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.game-info {
+    margin-bottom: 1rem;
+}
+
+.game__characters-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.game__characters {
+    display: flex;
+    align-items: center;
+}
+
+.game__character {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-black);
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.game__character.correct {
+    background-color: var(--color-green);
+    color: white;
+}
+
+.game__character.present {
+    background-color: var(--color-yellow);
+    color: var(--color-black);
+}
+
+.game__guesses {
+    margin-top: 32px;
+    height: 200px;
+    min-width: 200px;
+    background-color: var(--color-grey);
+}
+
+.game__guess {
+   display: flex; 
+}
+
+.success {
+    border: 1px solid var(--color-green);
+}
+
+.error {
+    border: 1px solid var(--color-red);
+}
+
+.game-keyboard {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: repeat(22, 15px);
+    grid-template-rows: repeat(3, 30px);
+    max-width: 510px;
+    width: 100%;
+    gap: 7px;
+    justify-content: space-between;
+}
+
+.game-keyboard__letter {
+    grid-column: span 2;
+    background: var(--color-blue);
+    color: var(--color-white);
+    border: 1px solid var(--color-blue);
+    padding: 7px 10px;
+    line-height: 1;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color .3s ease-in;
+}
+
+.game-keyboard__letter:hover {
+    background-color: var(--color-white);
+    color: var(--color-blue);
+}
+
+.game-keyboard__letter.used {
+    background-color: var(--color-grey);
+}
+
+.game-keyboard__letter.used.wrong {
+    background-color: var(--color-yellow);
+}
+
+.game-keyboard__letter.used.correct {
+    background-color: var(--color-green);
+}
+
+.game-keyboard__letter--enter {
+    grid-column: span 4;
+}
