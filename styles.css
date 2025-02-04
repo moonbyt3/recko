@@ -140,7 +140,7 @@ body {
 
 .game__guesses {
     margin-top: 32px;
-    height: 200px;
+    height: 240px;
     min-width: 200px;
     background-color: var(--color-grey);
 }
