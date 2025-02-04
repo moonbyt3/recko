@@ -83,8 +83,6 @@ const checkIfWordIsInTheList = function(word) {
     }
 }
 
-
-
 let usedWords = [];
 let usedCharacters = [];
 
@@ -241,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if(Number(localStorage.getItem('tries')) === 6) {
-            alert('you\'ve lost');
+            alert('Изгубили сте, задата реч је била: ' + correctWord);
             return;
         }
     });
