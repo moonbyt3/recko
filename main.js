@@ -135,6 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('backspace', i);
                 userGuess[i] = '';
                 inputWordCharacter.value = '';
+
+                if (inputFields[i].previousElementSibling) {
+                    inputFields[i].previousElementSibling.focus()
+                }
             }
 
             if (e.key == 'Enter') {
