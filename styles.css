@@ -168,17 +168,16 @@ body {
     left: 50%;
     transform: translateX(-50%);
     display: grid;
-    grid-template-columns: repeat(22, 14px);
+    grid-template-columns: repeat(22, auto);
     grid-template-rows: repeat(3, 30px);
-    max-width: max-content;
     width: 100%;
-    gap: 5px;
-    justify-content: space-between;
+    gap: 3px;
+    overflow: hidden;
 }
 
 .game-keyboard__letter {
     grid-column: span 2;
-    background: var(--color-blue);
+    background-color: var(--color-blue);
     color: var(--color-white);
     border: 1px solid var(--color-blue);
     padding: 5px 7px;
@@ -186,29 +185,28 @@ body {
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
-    transition: color .3s ease-in;
+    transition: background-color .3s ease-in;
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (min-width: 370px) {
     .game-keyboard {
-        grid-template-columns: repeat(22, 12px);
+        grid-template-rows: repeat(3, 40px);
     }
 
     .game-keyboard__letter {
-        /* font-size: 14px; */
-        padding: 7px 10px;
+        font-size: 13px;
+        padding: 5px 8px;
     }
 }
 
 @media only screen and (min-width: 600px) {
 
     .game-keyboard {
-        grid-template-columns: repeat(22, 20px);
-        grid-template-rows: repeat(3, 40px);
+        max-width: max-content;
     }
 
     .game-keyboard__letter {
-        font-size: 18px;
+        font-size: 16px;
         padding: 10px 16px;
     }
 }
