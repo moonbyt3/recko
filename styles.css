@@ -243,3 +243,18 @@ body {
 .game-keyboard__letter--enter {
     grid-column: span 4;
 }
+
+.square {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.square--green {
+    background-color: var(--color-green);
+}
+
+.square--yellow {
+    background-color: var(--color-yellow);
+}
