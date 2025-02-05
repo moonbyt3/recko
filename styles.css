@@ -56,12 +56,14 @@ table {
 :root {
     --color-black: #000;
     --color-white: #fff;
-    --color-grey: #b9b9b9;    
+    --color-grey-light: #dbdbdb;
+    --color-grey: #b9b9b9;
+    --color-grey-dark: #303030;
     --color-red: #d40000;
-    --color-green: #16c922;
-    --color-blue: #3b82f6;
+    --color-green: #68ca6f;
+    --color-blue: #1C2C50;
     --color-blue-dark: #0f172a;
-    --color-yellow: #eeee04;
+    --color-yellow: #dfdf63;
 }
 
 body {
@@ -127,7 +129,9 @@ body {
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: 1px solid var(--color-black);
+    border: 1px solid var(--color-white);
+    background-color: var(--color-blue-dark);
+    color: var(--color-grey-light);
     text-align: center;
     font-weight: bold;
     text-transform: uppercase;
@@ -147,7 +151,7 @@ body {
     margin-top: 32px;
     height: 240px;
     min-width: 200px;
-    background-color: var(--color-grey);
+    background-color: var(--color-blue);
 }
 
 .game__guess {
@@ -173,12 +177,15 @@ body {
     width: 100%;
     gap: 3px;
     overflow: hidden;
+    padding: 3px;
+    background-color: var(--color-blue-dark);
 }
 
 .game-keyboard__letter {
+    position: relative;
     grid-column: span 2;
-    background-color: var(--color-blue);
-    color: var(--color-white);
+    background-color: var(--color-blue-dark);
+    color: var(--color-grey-light);
     border: 1px solid var(--color-blue);
     padding: 5px 7px;
     line-height: 1;
@@ -186,6 +193,14 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color .3s ease-in;
+}
+
+.game-keyboard__letter svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
 }
 
 @media only screen and (min-width: 370px) {
@@ -226,10 +241,19 @@ body {
         background-color: var(--color-white);
         color: var(--color-blue);
     }
+
+    .game-keyboard__letter:hover svg {
+        fill: var(--color-blue);
+    }
+
+    .game-keyboard__letter svg {
+        width: 26px;
+    }
 }
 
 .game-keyboard__letter.used {
-    background-color: var(--color-grey);
+    background-color: var(--color-grey-dark);
+    color: var(--color-black);
 }
 
 .game-keyboard__letter.used.wrong {
