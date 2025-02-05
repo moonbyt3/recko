@@ -242,7 +242,7 @@ body {
         color: var(--color-blue);
     }
 
-    .game-keyboard__letter:hover svg {
+    .game-keyboard__letter:hover svg path {
         fill: var(--color-blue);
     }
 
