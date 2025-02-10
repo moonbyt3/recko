@@ -103,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const keyboardButtons = document.querySelectorAll('[js-game-letter]');
     const gameTriesElement = document.querySelector('[js-game-tries]');
     const gameGuesses = document.querySelector('.game__guesses');
-
+    const gameRewardWrapper = document.querySelector('.game-reward');
+    
     const increaseTries = function() {
         const currentTries = Number(localStorage.getItem('tries'));
         localStorage.setItem('tries', currentTries + 1);
@@ -118,6 +119,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const focusFirstCharacterInput = function() {
         inputFields[0].focus();
+    }
+
+    const increaseScore = function() {
+        const rewardScore = gameRewardWrapper.querySelector('.game-reward__number');
+        const rewardIcon = gameRewardWrapper.querySelector('.game-reward__item:not(.game-reward__item--stacked)');
+        const currentScore = rewardScore.textContent;
+        
+        const newRewardIcon = rewardIcon.cloneNode(true);
+        newRewardIcon.classList.add('game-reward__item--stacked');
+
+        score++;
+
+        if (score > 1 && score < 4) {
+            gameRewardWrapper.appendChild(newRewardIcon);
+        }
+        
+        rewardScore.innerHTML = score;
+        gameRewardWrapper.style.display = 'flex';
     }
 
 
@@ -137,6 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         gameTriesElement.textContent = localStorage.getItem('tries');
         correctWord = getRandomWord(allowedWords);
+        console.log('correct word: ', correctWord);
+        
         submitButton.setAttribute('disabled', true);
     }
 
@@ -256,9 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if(Number(localStorage.getItem('tries')) <= 5) {
                 if (userWord === correctWord) {
                     const modalWin = new Modal({ content: modalWinHTML });
-                    manager.addConfetti(); 
+                    manager.addConfetti();
                     setTimeout(() => {
                         modalWin.open();
+                        increaseScore();
                         newGame();
                     }, 300);
                 }
