@@ -69,6 +69,7 @@ table {
 body {
     background-color: var(--color-blue-dark);
     color: var(--color-white);
+    font-family: 'Arial';
 }
 
 .btn {
@@ -88,11 +89,12 @@ body {
 
 
 .game-title {
-    text-align: center;
-    font-size: 36px;
-    font-weight: bold;
     margin-top: 32px;
     margin-bottom: 16px;
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: center;
 }
 
 .game-desc {
@@ -272,6 +274,25 @@ body {
     grid-column: span 4;
 }
 
+.game-reward {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.game-reward__number {
+    margin-right: 0.5rem;
+}
+
+.game-reward__item svg {
+    width: 32px;
+}
+
+.game-reward__item--stacked {
+    margin-left: -18px;
+}
+
 .square {
     display: inline-block;
     width: 20px;
@@ -287,4 +308,92 @@ body {
 
 .square--yellow {
     background-color: var(--color-yellow);
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-body {
+    padding: 2.5rem 0;
+    color: var(--color-white);
+}
+
+.modal-body h2 {
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.modal-body p {
+    margin-bottom: 0.25rem;
+}
+
+.modal-body span {
+    display: block;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    width: 310px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--color-blue);
+    border-radius: 8px;
+    color: var(--color-black);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transform: scale(0.8);
+    text-align: center;
+    transition: transform 0.3s ease-in;
+}
+
+.modal-open .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--color-white);
+    cursor: pointer;
+}
+
+.bounce-7 {
+    animation-name: bounce-7;
+    animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+}
+
+@keyframes bounce-7 {
+    0%   { transform: scale(1,1)      translateY(0); }
+    10%  { transform: scale(1.1,.9)   translateY(0); }
+    30%  { transform: scale(.9,1.1)   translateY(-100px); }
+    50%  { transform: scale(1.05,.95) translateY(0); }
+    57%  { transform: scale(1,1)      translateY(-7px); }
+    64%  { transform: scale(1,1)      translateY(0); }
+    100% { transform: scale(1,1)      translateY(0); }
 }
