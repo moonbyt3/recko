@@ -1993,6 +1993,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                         setTimeout(() => {
                             modalLost.open();
+							soundManager.play('loss');
                             newGame(true);
                         }, 300);
                     });
@@ -2396,7 +2397,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	class SoundManager {
 		constructor() {
 			this.sounds = {
-				win: new Audio('/assets/sounds/win-trumpet.mp3')
+				win: new Audio('/assets/sounds/win-trumpet.mp3'),
+				loss: new Audio('/assets/sounds/loss-trumpet.mp3')
 			};
 		}
 	
