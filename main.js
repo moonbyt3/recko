@@ -1722,6 +1722,25 @@ let usedCharacters = [];
 
 let correctWord = getRandomWord(allowedWords); // The word to guess
 
+class SoundManager {
+	constructor() {
+		this.sounds = {
+			win: new Audio('/assets/sounds/win-trumpet.mp3')
+		};
+	}
+
+	play(soundName) {
+		if (this.sounds[soundName]) {
+			this.sounds[soundName].currentTime = 0; // Restart sound if already playing
+			this.sounds[soundName].play();
+		} else {
+			console.warn(`Sound "${soundName}" not found.`);
+		}
+	}
+}
+
+const soundManager = new SoundManager();
+
 // Main
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -1950,6 +1969,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (userWord === correctWord) {
                     const modalWin = new Modal({ content: modalWinHTML });
                     manager.addConfetti();
+					soundManager.play('win');
                     setTimeout(() => {
                         modalWin.open();
                         increaseScore();
@@ -1960,6 +1980,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (userWord === correctWord) {
                     const modalWin = new Modal({ content: modalWinHTML });
                     manager.addConfetti();
+					soundManager.play('win');
                     setTimeout(() => {
                         modalWin.open();
                         increaseScore();
@@ -2371,4 +2392,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const manager = new ConfettiManager();
+
+	class SoundManager {
+		constructor() {
+			this.sounds = {
+				win: new Audio('/assets/sounds/win-trumpet.mp3')
+			};
+		}
+	
+		play(soundName) {
+			if (this.sounds[soundName]) {
+				this.sounds[soundName].currentTime = 0; // Restart sound if already playing
+				this.sounds[soundName].play();
+			} else {
+				console.warn(`Sound "${soundName}" not found.`);
+			}
+		}
+	}
+	
+	const soundManager = new SoundManager();
 });
