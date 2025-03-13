@@ -1,3 +1,19 @@
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("/service-worker.js")
+            .then((registration) => {
+                console.log(
+                    "Service Worker registered with scope:",
+                    registration.scope
+                );
+            })
+            .catch((error) => {
+                console.log("Service Worker registration failed:", error);
+            });
+    });
+}
+
 const latinToCyrillicMap = {
     a: "а",
     b: "б",
@@ -1723,20 +1739,20 @@ let usedCharacters = [];
 let correctWord = getRandomWord(allowedWords); // The word to guess
 
 class SoundManager {
-	constructor() {
-		this.sounds = {
-			win: new Audio('/assets/sounds/win-trumpet.mp3')
-		};
-	}
+    constructor() {
+        this.sounds = {
+            win: new Audio("/assets/sounds/win-trumpet.mp3"),
+        };
+    }
 
-	play(soundName) {
-		if (this.sounds[soundName]) {
-			this.sounds[soundName].currentTime = 0; // Restart sound if already playing
-			this.sounds[soundName].play();
-		} else {
-			console.warn(`Sound "${soundName}" not found.`);
-		}
-	}
+    play(soundName) {
+        if (this.sounds[soundName]) {
+            this.sounds[soundName].currentTime = 0; // Restart sound if already playing
+            this.sounds[soundName].play();
+        } else {
+            console.warn(`Sound "${soundName}" not found.`);
+        }
+    }
 }
 
 const soundManager = new SoundManager();
@@ -1969,7 +1985,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (userWord === correctWord) {
                     const modalWin = new Modal({ content: modalWinHTML });
                     manager.addConfetti();
-					soundManager.play('win');
+                    soundManager.play("win");
                     setTimeout(() => {
                         modalWin.open();
                         increaseScore();
@@ -1980,7 +1996,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (userWord === correctWord) {
                     const modalWin = new Modal({ content: modalWinHTML });
                     manager.addConfetti();
-					soundManager.play('win');
+                    soundManager.play("win");
                     setTimeout(() => {
                         modalWin.open();
                         increaseScore();
@@ -1993,7 +2009,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                         setTimeout(() => {
                             modalLost.open();
-							soundManager.play('loss');
+                            soundManager.play("loss");
                             newGame(true);
                         }, 300);
                     });
@@ -2394,23 +2410,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const manager = new ConfettiManager();
 
-	class SoundManager {
-		constructor() {
-			this.sounds = {
-				win: new Audio('/assets/sounds/win-trumpet.mp3'),
-				loss: new Audio('/assets/sounds/loss-trumpet.mp3')
-			};
-		}
-	
-		play(soundName) {
-			if (this.sounds[soundName]) {
-				this.sounds[soundName].currentTime = 0; // Restart sound if already playing
-				this.sounds[soundName].play();
-			} else {
-				console.warn(`Sound "${soundName}" not found.`);
-			}
-		}
-	}
-	
-	const soundManager = new SoundManager();
+    class SoundManager {
+        constructor() {
+            this.sounds = {
+                win: new Audio("/assets/sounds/win-trumpet.mp3"),
+                loss: new Audio("/assets/sounds/loss-trumpet.mp3"),
+            };
+        }
+
+        play(soundName) {
+            if (this.sounds[soundName]) {
+                this.sounds[soundName].currentTime = 0; // Restart sound if already playing
+                this.sounds[soundName].play();
+            } else {
+                console.warn(`Sound "${soundName}" not found.`);
+            }
+        }
+    }
+
+    const soundManager = new SoundManager();
 });
