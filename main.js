@@ -1915,6 +1915,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
+
+        inputWordCharacter.addEventListener("focus", function (e) {
+            this.select();
+        })
     });
 
     // Handles user submitting the word
@@ -2408,8 +2412,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const manager = new ConfettiManager();
-
     class SoundManager {
         constructor() {
             this.sounds = {
@@ -2428,5 +2430,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    class Menu {
+        constructor() {
+            this.menuButton = document.querySelector('[js-menu-button]')
+            this.addEvents();
+        }
+
+        addEvents() {
+            if (this.menuButton) {
+                this.menuButton.addEventListener('click', function() {
+                    console.log('clock', this)
+
+                    this.classList.toggle('open');
+                    this.nextElementSibling.classList.toggle('open');
+                })
+            }
+        }
+
+        open() {
+            this.menuButton.classList.add('open');
+            this.menuButton.nextElementSibling.classList.toggle('open');
+        }
+    }
+
+    const menu = new Menu();
+
+    const manager = new ConfettiManager();
     const soundManager = new SoundManager();
 });
