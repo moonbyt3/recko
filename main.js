@@ -1795,21 +1795,19 @@ document.addEventListener("DOMContentLoaded", () => {
      */
 
     const restoreGameState = function () {
+        console.log('Restore game history');
+        
         // Restore tries display
         gameTriesElement.textContent = localStorage.getItem("tries");
 
         // Restore score display
         const scoreHistory = localStorage.getItem("score")
-        console.log('score history: ', scoreHistory);
+        if (Number(scoreHistory) > 0) {
+            document.querySelector("[js-points]").innerHTML = scoreHistory;
+            document.querySelector(".game-reward").style = 'display: flex;';
+        }
         
         gamePoints.innerHTML = localStorage.getItem("score");
-
-        // Restore stars display
-        const starsCount = parseInt(localStorage.getItem("stars")) || 0;
-        if (starsCount > 0) {
-            gameRewardWrapper.style.display = "flex";
-            // Add logic to recreate star icons based on starsCount
-        }
 
         // Restore previous guesses
         const savedGuesses = JSON.parse(localStorage.getItem("currentGuesses")) || [];
@@ -1836,8 +1834,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const letterStatusMap = {};
 
             guess.forEach((char, i) => {
-                console.log('guess ', guess, char);
-
                 const keyButton = [...document.querySelectorAll("[js-game-letter]")].find(
                     (el) => {
                         return el.textContent.toLowerCase().trim() === char.toLowerCase()
@@ -1922,19 +1918,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         gamePoints.innerHTML = localStorage.getItem("score");
-
-        const rewardIcon = gameRewardWrapper.querySelector(
-            ".game-reward__item:not(.game-reward__item--stacked)"
-        );
-
-        const newRewardIcon = rewardIcon.cloneNode(true);
-        newRewardIcon.classList.add("game-reward__item--stacked");
-
-        stars++;
-
-        if (stars > 1 && stars < 4) {
-            gameRewardWrapper.appendChild(newRewardIcon);
-        }
 
         gameRewardWrapper.style.display = "flex";
     };
