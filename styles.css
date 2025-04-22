@@ -530,8 +530,22 @@ body {
     background-color: var(--color-green);
 }
 
+.game-keyboard__letter.correct {
+    background-color: var(--color-green);
+}
+
+.game-keyboard__letter.wrong {
+    background-color: var(--color-yellow);
+    color: var(--color-black);
+}
+
 .game-keyboard__letter--enter {
     grid-column: span 4;
+}
+
+#game-keyboard-letter-back {
+    color: var(--color-white);
+    background-color: var(--color-blue-dark);
 }
 
 .game-reward {

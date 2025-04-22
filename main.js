@@ -1730,13 +1730,43 @@ const checkIfWordIsInTheList = function (word) {
     }
 };
 
-let score = 0;
+const scoreMap = {
+    1: 50,
+    2: 40,
+    3: 30,
+    4: 20,
+    5: 10,
+};
+
 let topScore = 0;
 
-let usedWords = [];
-let usedCharacters = [];
+let usedWords = JSON.parse(localStorage.getItem("usedWords")) || [];
+let usedCharacters = JSON.parse(localStorage.getItem("usedCharacters")) || [];
+let stars = parseInt(localStorage.getItem("stars")) || 0;
+let score = localStorage.getItem("score") || 0;
+let currentTries = parseInt(localStorage.getItem("tries")) || 0;
+let currentGuesses = JSON.parse(localStorage.getItem("currentGuesses")) || [];
+let correctWord =
+    localStorage.getItem("correctWord") || getRandomWord(allowedWords);
 
-let correctWord = getRandomWord(allowedWords); // The word to guess
+console.log('Correct word: ', correctWord);
+
+if (!localStorage.getItem("correctWord")) {
+    localStorage.setItem("correctWord", correctWord);
+}
+
+if (!localStorage.getItem("score")) {
+    localStorage.setItem("score", 0);
+}
+
+if (!localStorage.getItem('tries')) {
+    localStorage.setItem('tries', 0)
+}
+
+if (!localStorage.getItem("usedCharacters")) {
+    localStorage.setItem("usedCharacters", JSON.stringify([]))
+}
+
 
 class SoundManager {
     constructor() {
@@ -1760,7 +1790,91 @@ const soundManager = new SoundManager();
 // Main
 
 document.addEventListener("DOMContentLoaded", () => {
-    localStorage.setItem("tries", 0);
+    /**
+     * Restores game state in case of user refresh
+     */
+
+    const restoreGameState = function () {
+        // Restore tries display
+        gameTriesElement.textContent = localStorage.getItem("tries");
+
+        // Restore score display
+        const scoreHistory = localStorage.getItem("score")
+        console.log('score history: ', scoreHistory);
+        
+        gamePoints.innerHTML = localStorage.getItem("score");
+
+        // Restore stars display
+        const starsCount = parseInt(localStorage.getItem("stars")) || 0;
+        if (starsCount > 0) {
+            gameRewardWrapper.style.display = "flex";
+            // Add logic to recreate star icons based on starsCount
+        }
+
+        // Restore previous guesses
+        const savedGuesses = JSON.parse(localStorage.getItem("currentGuesses")) || [];
+        savedGuesses.forEach((guess) => {
+            gameGuesses.innerHTML =
+                `<div class="game__guess">${guess}</div>` +
+                gameGuesses.innerHTML;
+        });
+
+        // Restore keyboard state
+        const usedChars =
+            JSON.parse(localStorage.getItem("usedCharacters")) || [];
+        const userGuessHistory = usedChars
+            .map((char, index) =>
+                index % 5 === 0 ? usedChars.slice(index, index + 5) : null
+            )
+            .filter(Boolean);
+
+        console.log("userGuessHistory: ", userGuessHistory, savedGuesses);
+
+        
+        userGuessHistory.forEach((guess) => {
+            
+            const letterStatusMap = {};
+
+            guess.forEach((char, i) => {
+                console.log('guess ', guess, char);
+
+                const keyButton = [...document.querySelectorAll("[js-game-letter]")].find(
+                    (el) => {
+                        return el.textContent.toLowerCase().trim() === char.toLowerCase()
+                    }
+                )
+                
+                if (!keyButton) return;
+
+                const isCorrect = correctWord[i] === char;
+                console.log('correct. ', isCorrect);
+                
+                const isWrongPlace = !isCorrect && correctWord.includes(char);
+                const isUsed = !isCorrect && !correctWord.includes(char);
+
+                if (isCorrect) {
+                    // Always set correct, highest priority
+                    keyButton.classList.remove("wrong", "used");
+                    keyButton.classList.add("correct");
+                    letterStatusMap[char] = "correct";
+                } else if (isWrongPlace) {
+                    // Only set wrong if it isn't already correct
+                    if (letterStatusMap[char] !== "correct") {
+                        keyButton.classList.remove("used");
+                        keyButton.classList.add("wrong");
+                        letterStatusMap[char] = "wrong";
+                    }
+                } else if (isUsed) {
+                    // Only set used if it isn't already correct or wrong
+                    if (!letterStatusMap[char]) {
+                        keyButton.classList.add("used");
+                        letterStatusMap[char] = "used";
+                    }
+                }
+            });
+        });
+    };
+    // localStorage.setItem("tries", 0);
 
     const inputFieldsWrapper = document.querySelector(
         ".game__characters-wrapper"
@@ -1772,6 +1886,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameTriesElement = document.querySelector("[js-game-tries]");
     const gameGuesses = document.querySelector(".game__guesses");
     const gameRewardWrapper = document.querySelector(".game-reward");
+    const gamePoints = document.querySelector("[js-points]");
+
+    restoreGameState();
 
     const increaseTries = function () {
         const currentTries = Number(localStorage.getItem("tries"));
@@ -1791,9 +1908,21 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const increaseScore = function () {
-        const rewardScore = gameRewardWrapper.querySelector(
-            ".game-reward__number"
-        );
+        const currentTry = localStorage.getItem("tries");
+        // localStorage.setItem(
+        //     "score",
+        //     Number(localStorage.getItem("score")) + scoreMap[currentTry]
+        // );
+
+        if (localStorage.getItem('score')) {
+            localStorage.setItem(
+                "score",
+                Number(localStorage.getItem("score")) + scoreMap[currentTry]
+            );
+        }
+
+        gamePoints.innerHTML = localStorage.getItem("score");
+
         const rewardIcon = gameRewardWrapper.querySelector(
             ".game-reward__item:not(.game-reward__item--stacked)"
         );
@@ -1801,13 +1930,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const newRewardIcon = rewardIcon.cloneNode(true);
         newRewardIcon.classList.add("game-reward__item--stacked");
 
-        score++;
+        stars++;
 
-        if (score > 1 && score < 4) {
+        if (stars > 1 && stars < 4) {
             gameRewardWrapper.appendChild(newRewardIcon);
         }
 
-        rewardScore.innerHTML = score;
         gameRewardWrapper.style.display = "flex";
     };
 
@@ -1822,6 +1950,9 @@ document.addEventListener("DOMContentLoaded", () => {
         focusFirstCharacterInput();
 
         localStorage.setItem("tries", 0);
+        localStorage.setItem("currentGuesses", JSON.stringify([]));
+        localStorage.setItem("usedCharacters", JSON.stringify([]));
+
         gameGuesses.innerHTML = "";
         inputFieldsWrapper.classList.remove("success", "error");
         usedCharacters = [];
@@ -1832,6 +1963,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         gameTriesElement.textContent = localStorage.getItem("tries");
         correctWord = getRandomWord(allowedWords);
+        localStorage.setItem("correctWord", correctWord);
 
         console.log("correct word: ", correctWord);
 
@@ -1839,6 +1971,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (endGame) {
             score = 0;
+            stars = 0;
+            localStorage.setItem("score", 0);
+            localStorage.setItem("stars", 0);
+            localStorage.setItem('usedCharacters', [])
+            localStorage.setItem('currentGuesses', [])
             const rewardIcons =
                 gameRewardWrapper.querySelectorAll(".game-reward__item");
             rewardIcons.forEach((icon) => {
@@ -1918,7 +2055,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         inputWordCharacter.addEventListener("focus", function (e) {
             this.select();
-        })
+        });
     });
 
     // Handles user submitting the word
@@ -1936,38 +2073,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isWordAllowed) {
             let result = "";
-
             let usedLetters = [];
 
             inputFields.forEach((input, index) => {
                 const userChar = input.value.toLowerCase();
-
                 const letterPosition = correctWord.indexOf(userChar);
 
                 usedCharacters.push(userChar);
-
                 checkIfCharacterIsUsed(inputFields);
-
                 input.value = "";
 
                 if (letterPosition === -1) {
-                    result += `<div class="game__character">${userChar}</div>`; // Gray for incorrect character
+                    result += `<div class="game__character">${userChar}</div>`;
                 } else {
                     if (userChar === correctWord[index]) {
-                        result += `<div class="game__character correct">${userChar}</div>`; // Green for correct character
+                        result += `<div class="game__character correct">${userChar}</div>`;
                     } else {
                         if (
                             Array.from(correctWord).includes(userChar) &&
                             !usedLetters.includes(userChar)
                         ) {
                             usedLetters.push(userChar);
-                            result += `<div class="game__character present">${userChar}</div>`; // Yellow for present character
+                            result += `<div class="game__character present">${userChar}</div>`;
                         } else {
                             result += `<div class="game__character">${userChar}</div>`;
                         }
                     }
                 }
             });
+
+            // Save the current guess to localStorage
+            currentGuesses.unshift(result);
+            localStorage.setItem(
+                "currentGuesses",
+                JSON.stringify(currentGuesses)
+            );
+
+            // Save used characters
+            localStorage.setItem(
+                "usedCharacters",
+                JSON.stringify(usedCharacters)
+            );
 
             gameGuesses.innerHTML =
                 `<div class="game__guess">${result}</div>` +
@@ -2432,24 +2578,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     class Menu {
         constructor() {
-            this.menuButton = document.querySelector('[js-menu-button]')
+            this.menuButton = document.querySelector("[js-menu-button]");
             this.addEvents();
         }
 
         addEvents() {
             if (this.menuButton) {
-                this.menuButton.addEventListener('click', function() {
-                    console.log('clock', this)
+                this.menuButton.addEventListener("click", function () {
+                    console.log("clock", this);
 
-                    this.classList.toggle('open');
-                    this.nextElementSibling.classList.toggle('open');
-                })
+                    this.classList.toggle("open");
+                    this.nextElementSibling.classList.toggle("open");
+                });
             }
         }
 
         open() {
-            this.menuButton.classList.add('open');
-            this.menuButton.nextElementSibling.classList.toggle('open');
+            this.menuButton.classList.add("open");
+            this.menuButton.nextElementSibling.classList.toggle("open");
         }
     }
 
