@@ -81,6 +81,9 @@ const latinToCyrillicMap = {
 const allowedWords = [
     "бетон",
     "сукња",
+    "фјорд",
+    "шетња",
+    "кањон",
     "цртач",
     "љуска",
     "врлет",
